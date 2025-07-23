@@ -39,6 +39,7 @@ public class UsersController {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public User save(@RequestBody NewUserPayload payload) {
+
 		return this.usersService.save(payload);
 	}
 
