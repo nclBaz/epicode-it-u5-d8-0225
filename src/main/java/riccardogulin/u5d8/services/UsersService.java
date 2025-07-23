@@ -2,6 +2,10 @@ package riccardogulin.u5d8.services;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import riccardogulin.u5d8.entities.User;
 import riccardogulin.u5d8.exceptions.BadRequestException;
@@ -9,7 +13,6 @@ import riccardogulin.u5d8.exceptions.NotFoundException;
 import riccardogulin.u5d8.payloads.NewUserPayload;
 import riccardogulin.u5d8.repositories.UsersRepository;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -39,8 +42,10 @@ public class UsersService {
 		return savedUser;
 	}
 
-	public List<User> findAll() {
-		return this.usersRepository.findAll();
+	public Page<User> findAll(int pageNumber, int pageSize, String sortBy) {
+		if (pageSize > 50) pageSize = 50;
+		Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy).descending());
+		return this.usersRepository.findAll(pageable);
 	}
 
 	public User findById(UUID userId) {

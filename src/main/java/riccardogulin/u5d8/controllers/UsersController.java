@@ -1,13 +1,13 @@
 package riccardogulin.u5d8.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import riccardogulin.u5d8.entities.User;
 import riccardogulin.u5d8.payloads.NewUserPayload;
 import riccardogulin.u5d8.services.UsersService;
 
-import java.util.List;
 import java.util.UUID;
 
 /*
@@ -28,8 +28,12 @@ public class UsersController {
 	private UsersService usersService;
 
 	@GetMapping
-	public List<User> findAll() {
-		return this.usersService.findAll();
+	public Page<User> findAll(@RequestParam(defaultValue = "0") int page,
+	                          @RequestParam(defaultValue = "10") int size,
+	                          @RequestParam(defaultValue = "id") String sortBy
+	) {
+		// Posso mettere dei valori di default per i query params, per far si che non ci siano errori se il client non li imposta
+		return this.usersService.findAll(page, size, sortBy);
 	}
 
 	@PostMapping
